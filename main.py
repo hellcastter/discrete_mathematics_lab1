@@ -1,5 +1,6 @@
 """ Module which helps to do simple manipulations with relations """
 
+# 2nd task
 def reflexive_relation(matrix: list[list[int]]) -> list[list[int]]:
     """
     Finds reflexive relation of matrix.
@@ -22,6 +23,7 @@ def reflexive_relation(matrix: list[list[int]]) -> list[list[int]]:
         row[i] = 1
 
     return matrix
+
 
 def symmetrical_relation(matrix: list[list[int]]) -> list[list[int]]:
     """
@@ -53,6 +55,7 @@ def symmetrical_relation(matrix: list[list[int]]) -> list[list[int]]:
     return matrix
 
 
+# 4th task
 def search_equivalence_classes(matrix: list[list[int]]) -> list[list[int]]:
     """
     Finds equivalence classes of matrix. Matrix must be symmetrical, reflexive and reflective.
@@ -93,3 +96,100 @@ def search_equivalence_classes(matrix: list[list[int]]) -> list[list[int]]:
 
 
     return unique_classes
+
+
+# 5th task
+def is_transitive(matrix: list[list[int]]) -> bool:
+    """
+    Here must be code for checking is matrix transitive or not
+    """
+    return True
+
+
+# 6th task
+# Unfortunately, code for this task is a little complicated,
+# so it may take a while to understand this
+
+# You need to call search_transitive_count(3) function
+def _apply_to_all_matrixes(size: int, callback):
+    """
+    Help function for "search_transitive_count" function
+
+    Generates all possible n-size matrix and uses callback with them.
+    Function should return list of all matrixes, but it doesn't, 
+    so the memory and performance are saved.
+
+    # >>> print( *_apply_to_all_matrixes(2), lambda x: x, sep="\\n" )
+    # [[0, 0], [0, 0]]
+    # [[0, 0], [0, 1]]
+    # [[0, 0], [1, 0]]
+    # [[0, 0], [1, 1]]
+    # [[0, 1], [0, 0]]
+    # [[0, 1], [0, 1]]
+    # [[0, 1], [1, 0]]
+    # [[0, 1], [1, 1]]
+    # [[1, 0], [0, 0]]
+    # [[1, 0], [0, 1]]
+    # [[1, 0], [1, 0]]
+    # [[1, 0], [1, 1]]
+    # [[1, 1], [0, 0]]
+    # [[1, 1], [0, 1]]
+    # [[1, 1], [1, 0]]
+    # [[1, 1], [1, 1]]
+    """
+    matrix = [[None] * size for _ in range(size)]
+
+    def generate_binary_matrixes(num, matrix, callback, index = 0):
+        """ Generate all matrixes n-size """
+        if index == num ** 2:
+            callback(matrix)
+            return
+
+        row = index // num
+        col = index % num
+
+        # First assign "0" at i-th position
+        # and try for all other permutations
+        # for remaining positions
+        matrix[row][col] = 0
+        generate_binary_matrixes(num, matrix, callback, index + 1)
+
+        # And then assign "1" at i-th position
+        # and try for all other permutations
+        # for remaining positions
+        matrix[row][col] = 1
+        generate_binary_matrixes(num, matrix, callback, index + 1)
+
+    generate_binary_matrixes(size, matrix, callback)
+
+
+def search_transitive_count(size: int) -> int:
+    """
+    Searches number of transitive relations. There's no universal formula for this,
+    so we're forced to use method of "brut force" — generate and check every possible matrix.
+
+    On my PC execution time for:
+    n = 4: 0.15617036819458008
+    n = 5: 140.1703372001648
+
+    >>> search_transitive_count(0)
+    1
+    >>> search_transitive_count(1)
+    2
+    >>> search_transitive_count(3)
+    171
+    >>> search_transitive_count(4)
+    3994
+    """
+    count = 0
+
+    def check_transitive(matrix: list[list[int]]):
+        """ Help function that must be an callback """
+        nonlocal count
+
+        if is_transitive(matrix):
+            count += 1
+
+    _apply_to_all_matrixes(size, check_transitive)
+
+    return count
