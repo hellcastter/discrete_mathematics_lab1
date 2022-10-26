@@ -1,18 +1,13 @@
 """ Module which helps to do simple manipulations with relations """
+
+# 1st task
 def read_matrix(file_name: str) -> list[list[int]]:
     """
-    Reads and returns matrix from .csv file
-    # >>> read_matrix('matrix.csv')
-    # [0, 0, 0, 1, 0]
-    # [0, 0, 0, 1, 0]
-    # [0, 1, 0, 0, 0]
-    # [1, 0, 0, 0, 0]
-    # [0, 1, 0, 1, 1]
-
+    Reads and returns matrix from .txt file
     """
-
-    with open(file_name, encoding = 'utf-8') as file:
+    with open(file_name, encoding='utf-8') as file:
         matrix = file.read().split('\n')
+
     result = []
 
     for row in matrix:
@@ -20,7 +15,7 @@ def read_matrix(file_name: str) -> list[list[int]]:
         result.append(integer_row)
 
     return result
-    
+
 # 2nd task
 def reflexive_relation(matrix: list[list[int]]) -> list[list[int]]:
     """
