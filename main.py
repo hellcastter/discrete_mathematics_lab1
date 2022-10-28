@@ -1,4 +1,5 @@
 """ Module which helps to do simple manipulations with relations """
+import copy
 
 # 1st task
 def read_matrix(file_name: str) -> list[list[int]]:
@@ -15,6 +16,17 @@ def read_matrix(file_name: str) -> list[list[int]]:
         result.append(integer_row)
 
     return result
+
+def write_matrix(matrix: list[list[int]], file_name: str):
+    """
+    Creates new file where
+    """
+    string = ''
+    for row in matrix:
+        string += ''.join(str(n) for n in row) + '\n'
+
+    with open(file_name, 'w', encoding = 'utf-8') as file:
+        file.write(string.strip())
 
 # 2nd task
 def reflexive_relation(matrix: list[list[int]]) -> list[list[int]]:
@@ -70,6 +82,22 @@ def symmetrical_relation(matrix: list[list[int]]) -> list[list[int]]:
 
     return matrix
 
+# 3rd task
+def transitive_closure(matrix: list[list[int]]) -> list[list[int]]:
+    """
+    Turns matrix into transitive relation according to Warshall algorythm
+    """
+    new_matrix = copy.deepcopy(matrix)
+
+    for w in range(len(matrix)):
+        for i, row in enumerate(new_matrix):
+            if i != w:
+                if row[w] != 0:
+                    for j, col in enumerate(row):
+                        new_matrix[i][j] = col or new_matrix[w][j]
+
+    return new_matrix
+
 
 # 4th task
 def search_equivalence_classes(matrix: list[list[int]]) -> list[list[int]]:
@@ -117,9 +145,9 @@ def search_equivalence_classes(matrix: list[list[int]]) -> list[list[int]]:
 # 5th task
 def is_transitive(matrix: list[list[int]]) -> bool:
     """
-    Here must be code for checking is matrix transitive or not
+    Кeturns a boolean value if the function is transitive
     """
-    return True
+    return matrix == transitive_closure(matrix)
 
 
 # 6th task
