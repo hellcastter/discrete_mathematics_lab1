@@ -19,7 +19,7 @@ def read_matrix(file_name: str) -> list[list[int]]:
 
 def write_matrix(matrix: list[list[int]], file_name: str):
     """
-    Creates new file where
+    Creates a new file in which overwrites the input matrix according to the conditions
     """
     string = ''
     for row in matrix:
@@ -143,12 +143,36 @@ def search_equivalence_classes(matrix: list[list[int]]) -> list[list[int]]:
 
 
 # 5th task
+def is_transitive1(matrix: list[list[int]]) -> bool:
+    """
+    Кeturns a boolean value if the function is transitive
+    """
+    l = len(matrix)
+    res = [[0 for i in range(l)] for j in range(l)]
+    for i in range(l):
+        for j in range(l):
+            for k in range(l):
+                res[i][j] |= matrix[i][k] & matrix[k][j]
+        if matrix[i] != res[i]:
+            return False
+    return True
+
 def is_transitive(matrix: list[list[int]]) -> bool:
     """
     Кeturns a boolean value if the function is transitive
     """
-    return matrix == transitive_closure(matrix)
+    l = len(matrix)
+    res = [([0] * l) for _ in range(l)]
 
+    for i in range(l):
+        for j in range(l):
+            for k in range(l):
+                res[i][j] |= matrix[i][k] & matrix[k][j]
+
+        if matrix[i] != res[i]:
+            return False
+
+    return True
 
 # 6th task
 # Unfortunately, code for this task is a little complicated,
