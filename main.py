@@ -85,7 +85,7 @@ def symmetrical_relation(matrix: list[list[int]]) -> list[list[int]]:
 # 3rd task
 def transitive_closure(matrix: list[list[int]]) -> list[list[int]]:
     """
-    Turns matrix into transitive relation according to Warshall algorythm
+    Turns matrix into transitive relation according to Warshall algorithm
     """
     new_matrix = copy.deepcopy(matrix)
 
@@ -261,3 +261,9 @@ def search_transitive_count(size: int) -> int:
     _apply_to_all_matrixes(size, check_transitive)
 
     return count
+
+
+import time
+start = time.time()
+search_transitive_count(4)
+print(time.time() - start)
