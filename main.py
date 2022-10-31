@@ -178,7 +178,7 @@ def _apply_to_all_matrixes(size: int, callback):
     Help function for "search_transitive_count" function
 
     Generates all possible n-size matrix and uses callback with them.
-    Function should return list of all matrixes, but it doesn't, 
+    Function should return list of all matrixes, but it doesn't,
     so the memory and performance are saved.
 
     # >>> print( *_apply_to_all_matrixes(2), lambda x: x, sep="\\n" )
@@ -255,9 +255,3 @@ def search_transitive_count(size: int) -> int:
     _apply_to_all_matrixes(size, check_transitive)
 
     return count
-
-
-import time
-start = time.time()
-search_transitive_count(4)
-print(time.time() - start)
