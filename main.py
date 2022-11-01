@@ -1,5 +1,31 @@
 """ Module which helps to do simple manipulations with relations """
 
+# 1st task
+def read_matrix(file_name: str) -> list[list[int]]:
+    """ Reads and returns matrix from .txt file """
+    with open(file_name, encoding='utf-8') as file:
+        matrix = file.read().split('\n')
+
+    result = []
+
+    for row in matrix:
+        integer_row = list(map(int, row))
+        result.append(integer_row)
+
+    return result
+
+def write_matrix(matrix: list[list[int]], file_name: str):
+    """
+    Creates a new file in which overwrites the input matrix according to the conditions
+    """
+    string = ''
+    for row in matrix:
+        string += ''.join(str(n) for n in row) + '\n'
+
+    with open(file_name, 'w', encoding = 'utf-8') as file:
+        file.write(string.strip())
+
+
 # 2nd task
 def reflexive_relation(matrix: list[list[int]]) -> list[list[int]]:
     """
@@ -55,6 +81,31 @@ def symmetrical_relation(matrix: list[list[int]]) -> list[list[int]]:
     return matrix
 
 
+# 3rd task
+def transitive_closure(matrix: list[list[int]]) -> list[list[int]]:
+    """
+    Turns matrix into transitive relation according to Warshall's algorithm
+
+    >>> transitive_closure([[0, 0, 0, 0], [1,0, 1, 0], [1, 0, 0, 1], [1, 0, 1, 0]])
+    [[0, 0, 0, 0], [1, 0, 1, 1], [1, 0, 1, 1], [1, 0, 1, 1]]
+    """
+    size = len(matrix)
+    size_range = range(size)
+
+    for k in size_range:
+        for i, row in enumerate(matrix):
+            if i == k:
+                continue
+
+            if row[k] == 0:
+                continue
+
+            for j, col in enumerate(row):
+                matrix[i][j] = col or matrix[k][j]
+
+    return matrix
+
+
 # 4th task
 def search_equivalence_classes(matrix: list[list[int]]) -> list[list[int]]:
     """
@@ -101,8 +152,31 @@ def search_equivalence_classes(matrix: list[list[int]]) -> list[list[int]]:
 # 5th task
 def is_transitive(matrix: list[list[int]]) -> bool:
     """
-    Here must be code for checking is matrix transitive or not
+    Сhecks whether the relation is transitive one according to Warshall's algorithm.
+
+    >>> is_transitive([[1,1,1,1], [1,1,1,1], [0,0,0,1], [0,0,0,0]])
+    True
+    >>> is_transitive([[1,1,1,1], [1,1,1,1], [0,1,0,1], [1,0,1,0]])
+    False
     """
+    size = len(matrix)
+    size_range = range(size)
+
+    for k in size_range:
+        for row in size_range:
+            if row == k:
+                continue
+
+            if matrix[row][k] == 0:
+                continue
+
+            for col in size_range:
+                temp = matrix[row][col]
+                new_value = matrix[row][col] or matrix[k][col]
+
+                if temp != new_value:
+                    return False
+
     return True
 
 
@@ -116,7 +190,7 @@ def _apply_to_all_matrixes(size: int, callback):
     Help function for "search_transitive_count" function
 
     Generates all possible n-size matrix and uses callback with them.
-    Function should return list of all matrixes, but it doesn't, 
+    Function should return list of all matrixes, but it doesn't,
     so the memory and performance are saved.
 
     # >>> print( *_apply_to_all_matrixes(2), lambda x: x, sep="\\n" )
@@ -170,7 +244,7 @@ def search_transitive_count(size: int) -> int:
 
     On my PC execution time for:
     n = 4: 0.15617036819458008
-    n = 5: 140.1703372001648
+    n = 5: 94.90624475479126
 
     >>> search_transitive_count(0)
     1
